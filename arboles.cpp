@@ -68,7 +68,7 @@ int main() {
 	int dato;
 	do {
 		cout << "\tMenú\n";
-		cout << "1. Insertar nodo \n2. Mostrar árbol\n3. Buscar si existe un número\n4. Altura de un nodo\n5. Altura del árbol\n";
+		cout << "1. Insertar nodo \n2. Mostrar árbol\n3. Buscar si existe un número\n4. Altura de un nodo\n5. Altura del árbol binario\n";
 		cout << "Opción: ";
 		cin >> op;
 		switch (op) {
