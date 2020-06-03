@@ -13,6 +13,7 @@ struct nodo {
 	int dato;
 	nodo* izquierda = NULL;
 	nodo* derecha = NULL;
+	nodo *padre = NULL;
 } *arbol;
 
 void insertar(int dato, nodo*& arbol) {
