@@ -196,6 +196,31 @@ void borrar_op(){
 	}
 }
 
+// Función booleana que devuelve true si se introduce 1 o false si se introduce 2
+bool seguro(){
+	int op = 0;
+	do{
+		cout<<"\t¿Está seguro de eliminar todo?\n\n1. Si\n2. No\n\nOpción: ";
+		cin>>op;
+	}while (op != 1 && op != 2);		// Se cuestiona al usuario si está seguro de querer borrar el árbol
+	if (op == 1)
+		return true;
+	if (op == 2)
+		return false;
+}
+
+// Está función borra todo el árbol
+void del_all(nodo *&arbol){
+	if (arbol->izquierda != NULL)		//Se utiliza recursión para avanzar por todo el árbol, eliminando los nodos de izquierda a derecha
+		del_all(arbol->izquierda);
+	if (arbol->derecha != NULL)
+		del_all(arbol->derecha);
+	if (arbol->derecha == NULL && arbol->derecha == NULL){ // Se revisa si los nodos tienen hijos, en caso de no tener, se elimina el nodo
+		delete arbol;
+		arbol = NULL;
+	}
+}
+
 int main() {
 	setlocale(LC_ALL, "spanish");
 	int op = 0;
@@ -258,6 +283,30 @@ int main() {
 			cout << "La altura del arbol es: " << altura << endl;
 			system("pause");
 			break;
+		case 8:
+			if (arbol == NULL){
+				cout<<"No se ha creado ningún nodo\n";
+				
+			}
+			else
+				borrar_op();
+			system("pause");
+			break;
+		case 9:
+			system("cls");
+			if (arbol == NULL){
+				cout<<"No se ha creado ningún nodo\n";
+			}
+			else
+			if (seguro()){
+				del_all(arbol);
+			}
+			else{
+				cout<<"\n¡Operación Cancelada!\n";
+			}
+				
+		system("pause");
+		break;
 		}
 		system("CLS");
 	} while (op != 10);
