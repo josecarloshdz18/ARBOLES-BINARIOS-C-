@@ -239,7 +239,11 @@ int main() {
 			break;
 		case 2:
 			system("cls");
-			imprimir(0, arbol);
+			if (arbol == NULL) {
+				cout << "No se ha creado ningún nodo\n";
+			}
+			else 
+				imprimir(0, arbol);
 			system("pause");
 			break;
 		case 3:
