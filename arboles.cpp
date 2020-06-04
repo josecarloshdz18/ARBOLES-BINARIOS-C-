@@ -7,7 +7,7 @@ using namespace std;
 
 bool enc = false;
 bool op34;  // filtra si se utilizó buscar un nodo, o dar su altura
-int altura;
+int altura; // Sirve para devolver la altura.
 // Se declara un struct de tipo nodo, el cual define la estructura de cada nodo del árbol
 struct nodo {
 	int dato;
@@ -16,11 +16,13 @@ struct nodo {
 	nodo *padre = NULL;
 } *arbol;
 
+// Función para insertar
 void insertar(int dato, nodo*& arbol) {
-	if (arbol == NULL) {
+	if (arbol == NULL) { // Si se llega a un nodo nulo, se generará uno nuevo con el dato
 		arbol = new nodo;
 		arbol->dato = dato;
 	}
+	// Se va recorrriendo las ramas según si el dato es mayor o menor que el valor del nodo actual
 	else {
 		if (dato <= arbol->dato) {
 			insertar(dato, arbol->izquierda);
@@ -30,11 +32,14 @@ void insertar(int dato, nodo*& arbol) {
 	}
 }
 
+// Función para imprimir
+// Se utiliza de manera recursiva avanzando primero a los nodos de la derecha
 void imprimir(int cont, nodo* arbol) {
 	if (arbol == NULL) {
-		return;
+		return;			
 	}
-	else {
+	else {			// Se van recorriendo los nodos de derecha a izquierda, regresando e impriendo el valor del nodo 
+					// cuando este no tenga hijo derecho o ya se haya recorrido
 		imprimir(cont + 1, arbol->derecha);
 		for (int i = 0; i <= cont; i++)
 			cout << "    ";
@@ -44,18 +49,20 @@ void imprimir(int cont, nodo* arbol) {
 	}
 }
 
+// Función para buscar si existe / altura
+// Igualmente es recursiva, avanzando primero por los nodos de la derecha
 void buscar(int dato, nodo* arbol, int cont) {
 	if (altura <= cont) {
-		altura = cont;
+		altura = cont; // Se utiliza un contador para la altura
 	}
 	if (arbol == NULL) {
 		return;
 	}
 	else {
 		if (dato == arbol->dato) {
-			if (op34)
+			if (op34) // El valor es verdadero cuando se accede desde la opción 4, imprimiendo el dato y su altura
 				cout << "Se encontró el dato " << dato << " en la altura: " << cont << endl;
-			enc = true;
+			enc = true; // Si encuantra el valor, enc cambiará a true, para imprimir si se encontró el valor en la opción 3
 		}
 		buscar(dato, arbol->derecha, cont + 1);
 		buscar(dato, arbol->izquierda, cont + 1);
@@ -63,49 +70,67 @@ void buscar(int dato, nodo* arbol, int cont) {
 
 }
 
-
+// Función para lleva a cabo la eliminación de un nodo
+// en realidad si el nodo a eliminar tiene hijos, se sustituye el valor de este por el que lo reemplazaría, y este ultimo se elimina
+// nodo más a la derecha si existe subárbol izquierdo == "nodo x", se termina borrando nodo x
 void cambio(nodo *arbol){
-	nodo *eliminar = NULL;
+	nodo *eliminar = NULL; // Apuntador para el nodo a eliminar
+
 	eliminar = arbol;
-	if (arbol->padre == NULL){	
+	if (arbol->padre == NULL){	// Se ingresará al if si el nodo a eliminar es la raíz, y admás existe un subárbol izquierdo
 		if (eliminar->izquierda != NULL)
-			eliminar = eliminar->izquierda;
+			eliminar = eliminar->izquierda; // Se avanza a la izquierda
 		while (eliminar->derecha != NULL && arbol != NULL){
-			eliminar = eliminar->derecha;
+			eliminar = eliminar->derecha; // se avanza al nodo que esté más a la derecha si es que existen
 		}
-		arbol->dato = eliminar->dato;
-		if (eliminar->izquierda != NULL){
+		arbol->dato = eliminar->dato; // Se recibe el dato del nodo que esté más a la derecha del subárbol izquierdo (nodo x)
+		if (eliminar->izquierda != NULL){ // Si el nodo x tiene hijo (solo puede ser a la izq), se enlazan el padre de x y su hijo de x
 			eliminar->padre->izquierda = eliminar->izquierda;
 			eliminar->izquierda->padre = eliminar->padre;
 		}
-		else{
-			eliminar->padre->derecha = NULL;
+		else{ // En caso de que x no tenga hijo
+			if (arbol->izquierda == eliminar)
+				arbol->izquierda = NULL; // Si solo avanzo al subarbol izq, se enlaza la izq de árbol con nulo
+			else
+				eliminar->padre->derecha = NULL; // Caso contrario se enlaza el la derecha del padre de x con nulo
 		}
 		
 	}
-	else{
-	if (eliminar->izquierda != NULL){
-			eliminar = eliminar->izquierda;
+	else{ // Se entra aquí cuando el nodo a eliminar no es raíz
+	if (eliminar->izquierda != NULL){// Se entra si existe subárbol izquierdo
+			eliminar = eliminar->izquierda; // Se avanza a la raíz del subárbol izq
 		while (eliminar->derecha != NULL && arbol != NULL){
-			eliminar = eliminar->derecha;
+			eliminar = eliminar->derecha; // Se avanza al elemento que esté más a la derecha (nodo x)
 		}
-		arbol->dato = eliminar->dato;
-		if (eliminar->izquierda != NULL){
-			arbol->izquierda = eliminar->izquierda;
-			eliminar->izquierda->padre = arbol;
+		arbol->dato = eliminar->dato; // Se manda el dato del nodo x al nodo que se quería eliminar
+		if (eliminar->izquierda != NULL){ // Si el nodo x tiene un hijo (por lógica solo el izquierdo) se enlaza el padre de x con su hijo de x
+			if (eliminar->padre->izquierda == eliminar){
+				eliminar->padre->izquierda = eliminar->izquierda;
+				eliminar->izquierda->padre = eliminar->padre;
+			}													// Se busca dar al hijo de x la posición de x (enlazar con padre de x padre)
+			else{
+			eliminar->padre->derecha = eliminar->izquierda;
+			eliminar->izquierda->padre = eliminar->padre;
+			} 
 		}
-		else{
-			eliminar->padre->derecha = NULL;
+		else{ // En caso de que x no tenga hijos se iguala el hijo derecho del padre a x
+			if (eliminar->padre->derecha == eliminar)
+				eliminar->padre->derecha = NULL;			// Se busca dar a la posición de x el valor de nulo (enlazar con padre de x)
+			if (eliminar->padre->izquierda == eliminar)
+				eliminar->padre->izquierda = NULL;
 		}
 	}
-	else if (eliminar->derecha != NULL){
+	else if (eliminar->derecha != NULL){// en caso de que existasubárbol derecho y no izquierdo, 
 		arbol = arbol->derecha;
-		eliminar->padre->derecha = arbol;
+		if (eliminar->padre->derecha == eliminar)
+			eliminar->padre->derecha = arbol;
+		else										// Se busca suplir la posición de x con la de su hijo o nulo (se enlaza con padre)
+			eliminar->padre->izquierda = arbol;
 		arbol->padre = eliminar->padre;
 	}
 	}
 	
-	delete eliminar;
+	delete eliminar;    // Se elimina el nodo sobrante y se apunta a NULL
 	eliminar = NULL;
 }
 
@@ -122,7 +147,7 @@ bool borrar(int dato, nodo *arbol){
 		// caso contrario se elimina, y al padre se le enlaza con NULL
 		else{
 			if (arbol->padre->derecha == arbol)
-				arbol->padre->derecha = NULL;
+				arbol->padre->derecha = NULL;		// Se busca de que lado estaba enlazado al padre
 			if (arbol->padre->izquierda == arbol)
 				arbol->padre->izquierda = NULL;
 			delete arbol;
