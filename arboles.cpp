@@ -6,7 +6,7 @@
 using namespace std;
 
 bool enc = false;
-bool op34;
+bool op34;  // filtra si se utilizó buscar un nodo, o dar su altura
 int altura;
 // Se declara un struct de tipo nodo, el cual define la estructura de cada nodo del árbol
 struct nodo {
@@ -63,9 +63,9 @@ void buscar(int dato, nodo* arbol, int cont) {
 
 }
 
+
 void cambio(nodo *arbol){
 	nodo *eliminar = NULL;
-	nodo *PNULL = NULL;
 	eliminar = arbol;
 	if (arbol->padre == NULL){	
 		if (eliminar->izquierda != NULL)
@@ -75,7 +75,7 @@ void cambio(nodo *arbol){
 		}
 		arbol->dato = eliminar->dato;
 		if (eliminar->izquierda != NULL){
-			eliminar->padre->derecha = eliminar->izquierda;
+			eliminar->padre->izquierda = eliminar->izquierda;
 			eliminar->izquierda->padre = eliminar->padre;
 		}
 		else{
@@ -95,12 +95,8 @@ void cambio(nodo *arbol){
 			eliminar->izquierda->padre = arbol;
 		}
 		else{
-			eliminar->padre->izquierda = NULL;
+			eliminar->padre->derecha = NULL;
 		}
-	}
-	else
-	if (eliminar->derecha != NULL && arbol->padre == NULL){
-		arbol = arbol->derecha;
 	}
 	else if (eliminar->derecha != NULL){
 		arbol = arbol->derecha;
@@ -117,9 +113,13 @@ void cambio(nodo *arbol){
 bool borrar(int dato, nodo *arbol){
 	bool encontrado = false;
 	if (arbol->dato == dato){
+
+		// Si el nodo con el dato no es un nodo hoja, se llamará a otra función para unir a los hijos
 		if (arbol->izquierda != NULL || arbol->derecha != NULL){
 			cambio(arbol);
 		}
+		
+		// caso contrario se elimina, y al padre se le enlaza con NULL
 		else{
 			if (arbol->padre->derecha == arbol)
 				arbol->padre->derecha = NULL;
@@ -134,7 +134,7 @@ bool borrar(int dato, nodo *arbol){
 
 	// Se utiliza recursividad para avanzar a través del arbol mientras alguno de los hijos del nodo actual no sean nulos, y así buscar en todos los nodos
 	// recorriendo de arriba hacia abajo, y de izquierda a derecha (Pre-orden)
-	if (arbol->izquierda != NULL && arbol->derecha != NULL){	
+	if (arbol->izquierda != NULL || arbol->derecha != NULL){	
 		if(dato < arbol->dato){
 			encontrado = borrar(dato, arbol->izquierda);
 		}
