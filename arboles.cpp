@@ -17,18 +17,19 @@ struct nodo {
 } *arbol;
 
 // Función para insertar
-void insertar(int dato, nodo*& arbol) {
+void insertar(int dato, nodo*& arbol, nodo *padre) {
 	if (arbol == NULL) { // Si se llega a un nodo nulo, se generará uno nuevo con el dato
 		arbol = new nodo;
 		arbol->dato = dato;
+		arbol->padre = padre;
 	}
 	// Se va recorrriendo las ramas según si el dato es mayor o menor que el valor del nodo actual
 	else {
 		if (dato <= arbol->dato) {
-			insertar(dato, arbol->izquierda);
+			insertar(dato, arbol->izquierda, arbol);
 		}
 		else
-			insertar(dato, arbol->derecha);
+			insertar(dato, arbol->derecha, arbol);
 	}
 }
 
@@ -75,8 +76,8 @@ void buscar(int dato, nodo* arbol, int cont) {
 // nodo más a la derecha si existe subárbol izquierdo == "nodo x", se termina borrando nodo x
 void cambio(nodo *arbol){
 	nodo *eliminar = NULL; // Apuntador para el nodo a eliminar
-
 	eliminar = arbol;
+
 	if (arbol->padre == NULL){	// Se ingresará al if si el nodo a eliminar es la raíz, y admás existe un subárbol izquierdo
 		if (eliminar->izquierda != NULL)
 			eliminar = eliminar->izquierda; // Se avanza a la izquierda
@@ -234,7 +235,7 @@ int main() {
 		case 1:
 			cout << "Dame el número a insertar: ";
 			cin >> dato;
-			insertar(dato, arbol);
+			insertar(dato, arbol, NULL);
 			break;
 		case 2:
 			system("cls");
