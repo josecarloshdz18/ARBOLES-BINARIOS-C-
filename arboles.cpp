@@ -223,19 +223,31 @@ void del_all(nodo *&arbol){
 }
 
 void PreOrden(nodo *arbol){
+	bool visit = false;
 	if(arbol == NULL){
 		return;
 	}
 	else{
 		cout<<arbol->dato<<"-"; //Imprimer le valor del nodo
-		if(arbol->izquierda != NULL){
+		PreOrden(arbol->izquierda);
+		PreOrden(arbol->derecha);
+		/*if(arbol->izquierda != NULL){
 			arbol = arbol->izquierda;
+			visit = true;
 			PreOrden(arbol);
 		}else{
 			return;
 		}
+		if(arbol->derecha != NULL){
+			arbol = arbol->derecha;
+			PreOrden(arbol);
+		}else{
+			return;
+		}
+		system("pause");*/
+
 	}
-	system("pause");
+	
 }
 
 //Está funcion te muestra las 3 formas posibles de recorrer el arbol 
