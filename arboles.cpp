@@ -223,46 +223,59 @@ void del_all(nodo *&arbol){
 }
 
 void PreOrden(nodo *arbol){
-	bool visit = false;
-	if(arbol == NULL){
+	if(arbol == NULL){//Si el arbol esta vacio
 		return;
 	}
 	else{
 		cout<<arbol->dato<<"-"; //Imprimer le valor del nodo
-		PreOrden(arbol->izquierda);
-		PreOrden(arbol->derecha);
-		/*if(arbol->izquierda != NULL){
-			arbol = arbol->izquierda;
-			visit = true;
-			PreOrden(arbol);
-		}else{
-			return;
-		}
-		if(arbol->derecha != NULL){
-			arbol = arbol->derecha;
-			PreOrden(arbol);
-		}else{
-			return;
-		}
-		system("pause");*/
+		PreOrden(arbol->izquierda);// Recorre el subarbol izquierdo
+		PreOrden(arbol->derecha);// Recorre el subarbol derecho
+	}
+}
+void InOrden(nodo *arbol){
+	if(arbol == NULL){//Si el arbol esta vacio
+		return;
+	}
+	else{
+		InOrden(arbol->izquierda);// Recorre el subarbol izquierdo
+		cout<<arbol->dato<<"-"; //Imprimer le valor del nodo
+		InOrden(arbol->derecha);// Recorre el subarbol derecho
+	}
 
+}
+void PostOrden(nodo *arbol){
+	if(arbol == NULL){//Si el arbol esta vacio
+		return;
+	}
+	else{
+		PostOrden(arbol->izquierda);// Recorre el subarbol izquierdo
+		PostOrden(arbol->derecha);// Recorre el subarbol derecho
+		cout<<arbol->dato<<"-"; //Imprimer le valor del nodo
 	}
 	
 }
-
 //Está funcion te muestra las 3 formas posibles de recorrer el arbol 
 void seleccionCamino(){
 	int x;
 	do{
 		system("cls");
-		cout<<"Caminos\n1. PreOrden\n2.";
+		cout<<"Caminos\n1. PreOrden\n2. InOrden\n3. PostOrden\n";
 		cin>>x;
 	}while(x>3||x<1);
 	switch (x)
 	{
 	case 1:
 		PreOrden(arbol);
+		system("pause");
 		break;
+	case 2:
+		InOrden(arbol);
+		system("pause");
+		break;
+	case 3:
+		PostOrden(arbol);
+		system("pause");
+		break;	
 	}
 }
 
@@ -272,7 +285,7 @@ int main() {
 	int dato;
 	do {
 		cout << "\tMenú\n";
-		cout << "1. Insertar nodo \n2. Mostrar árbol\n3. Buscar si existe un número\n4. Altura de un nodo\n5. Altura del árbol binario\n7. Recorrido de arbol";
+		cout << "1. Insertar nodo \n2. Mostrar árbol\n3. Buscar si existe un número\n4. Altura de un nodo\n5. Altura del árbol binario\n7. Recorrido de arbol\n";
 		cout << "Opción: ";
 		cin >> op;
 		switch (op) {
