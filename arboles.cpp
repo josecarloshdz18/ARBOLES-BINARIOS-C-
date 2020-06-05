@@ -37,7 +37,7 @@ void insertar(int dato, nodo*& arbol, nodo *padre) {
 // Se utiliza de manera recursiva avanzando primero a los nodos de la derecha
 void imprimir(int cont, nodo* arbol) {
 	if (arbol == NULL) {
-		return;			
+		return;
 	}
 	else {			// Se van recorriendo los nodos de derecha a izquierda, regresando e impriendo el valor del nodo 
 					// cuando este no tenga hijo derecho o ya se haya recorrido
@@ -222,13 +222,45 @@ void del_all(nodo *&arbol){
 	}
 }
 
+void PreOrden(nodo *arbol){
+	if(arbol == NULL){
+		return;
+	}
+	else{
+		cout<<arbol->dato<<"-"; //Imprimer le valor del nodo
+		if(arbol->izquierda != NULL){
+			arbol = arbol->izquierda;
+			PreOrden(arbol);
+		}else{
+			return;
+		}
+	}
+	system("pause");
+}
+
+//Está funcion te muestra las 3 formas posibles de recorrer el arbol 
+void seleccionCamino(){
+	int x;
+	do{
+		system("cls");
+		cout<<"Caminos\n1. PreOrden\n2.";
+		cin>>x;
+	}while(x>3||x<1);
+	switch (x)
+	{
+	case 1:
+		PreOrden(arbol);
+		break;
+	}
+}
+
 int main() {
 	setlocale(LC_ALL, "spanish");
 	int op = 0;
 	int dato;
 	do {
 		cout << "\tMenú\n";
-		cout << "1. Insertar nodo \n2. Mostrar árbol\n3. Buscar si existe un número\n4. Altura de un nodo\n5. Altura del árbol binario\n";
+		cout << "1. Insertar nodo \n2. Mostrar árbol\n3. Buscar si existe un número\n4. Altura de un nodo\n5. Altura del árbol binario\n7. Recorrido de arbol";
 		cout << "Opción: ";
 		cin >> op;
 		switch (op) {
@@ -288,6 +320,9 @@ int main() {
 			cout << "La altura del arbol es: " << altura << endl;
 			system("pause");
 			break;
+		case 7:
+			seleccionCamino();
+			break;	
 		case 8:
 			if (arbol == NULL){
 				cout<<"No se ha creado ningún nodo\n";
